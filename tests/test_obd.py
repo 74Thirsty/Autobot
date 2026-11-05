@@ -2,6 +2,7 @@ import asyncio
 import sys
 from types import SimpleNamespace
 
+
 from autobot.vehicle.obd import OBDAdapter
 
 class FakeValue:
@@ -66,7 +67,7 @@ def test_polling_interval_prevents_repeated_pid_queries(monkeypatch):
     monkeypatch.setitem(sys.modules, "obd", SimpleNamespace(commands=commands))
     fake = FakeConnection()
     adapter = OBDAdapter(connection_factory=lambda **kwargs: fake,
-                         serial_scanner=lambda: [], poll_interval=2.0)
+                         serial_scanner=list, poll_interval=2.0)
     asyncio.run(adapter.snapshot())
     first_count = len(fake.queries)
     asyncio.run(adapter.snapshot())
