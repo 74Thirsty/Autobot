@@ -79,7 +79,7 @@ async function askAutobot(text){
  try{const r=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:clean})});
  const d=await r.json();if(!r.ok)throw Error(d.detail||'Request failed');$('#reply').textContent=d.reply;
  if(speaking&&window.speechSynthesis){window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(d.reply);window.speechSynthesis.speak(u)}
- }catch(e){$('#reply').textContent='Unable to reach Autobot: '+e.message}finally{busy=false}
+ }catch(e){$('#reply').textContent='Unable to reach Autobot: '+e.message}finally{busy=false;if(mode==='wake'&&!recognition)setTimeout(()=>{if(mode==='wake'&&!recognition)startRecognition('wake')},400)}
 }
 function startRecognition(kind){
  if(!SpeechRecognition){voiceMessage('Speech recognition is not supported by this browser. Use text chat or a supported Chromium browser.');return}
@@ -90,7 +90,7 @@ function startRecognition(kind){
  const words=e.results[i][0].transcript.trim();if(kind==='push'){stopRecognition();askAutobot(words);return}
  const match=words.match(/\bhey\s+autobot\b[,.!\s]*(.*)/i);if(match){const command=match[1].trim();if(command){askAutobot(command)}else{voiceMessage('I’m listening. Say your request.');startRecognition('push');return}}
  }};
- r.onend=()=>{if(kind==='wake'&&mode==='wake'&&!busy){recognition=null;setTimeout(()=>{if(mode==='wake')startRecognition('wake')},350)}else if(kind==='push'){recognition=null;mode='off';voiceMessage('Voice capture ended.')}};
+ r.onend=()=>{if(recognition===r)recognition=null;if(kind==='wake'&&mode==='wake'){if(!busy)setTimeout(()=>{if(mode==='wake'&&!recognition)startRecognition('wake')},350)}else if(kind==='push'){mode='off';voiceMessage('Voice capture ended.')}};
  try{r.start()}catch(e){recognition=null;mode='off';voiceMessage('Could not start microphone: '+e.message)}
 }
 $('#chat').addEventListener('submit',e=>{e.preventDefault();askAutobot($('#message').value)});
