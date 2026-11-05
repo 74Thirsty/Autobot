@@ -1,6 +1,7 @@
 from autobot.intelligence.base import AIProvider
 from autobot.memory.store import MemoryStore
 
+
 class Assistant:
     """Coordinates user messages, model responses, and local conversation history."""
     def __init__(self, provider: AIProvider, memory: MemoryStore) -> None:
