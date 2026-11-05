@@ -6,7 +6,7 @@ Autobot is a modular hybrid vehicle assistant. The Raspberry Pi is the in-car ed
 
 ## Status
 
-Initial scaffold. The API, local development mode, SQLite persistence, dashboard, provider interface, and simulated read-only vehicle adapter are in place. Physical OBD-II, microphone/speaker, Bluetooth routing, and cloud model integrations still require implementation and on-device validation.
+The initial application scaffold and Phase 2 read-only OBD-II software integration are implemented. Physical adapter compatibility and live readings still require validation on the target vehicle. Microphone/speaker, Bluetooth routing, and cloud model integrations remain future work.
 
 ## Principles
 
@@ -63,7 +63,7 @@ Raspberry Pi 5 has USB, Bluetooth, Wi-Fi, GPIO, camera/display interfaces, and P
 4. [x] ELM327 discovery, read-only PID polling, and stale-data reporting (hardware validation pending)
 5. [ ] Verify clean install, tests, and CI
 6. [ ] Physically validate OBD-II adapter against the Lincoln MKT
-6. [ ] Add voice capture and speech output
+7. [ ] Add voice capture and speech output
 8. [ ] Add configurable cloud/local model providers
 9. [ ] Build touchscreen dashboard and startup/service packaging
 10. [ ] Validate ignition, sleep, shutdown, brownout, and reconnect behavior in vehicle
