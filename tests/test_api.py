@@ -19,3 +19,14 @@ def test_chat_and_local_memory() -> None:
     assert "local scaffold mode" in response.json()["reply"]
     history = client.get("/api/memory/test-session")
     assert [m["role"] for m in history.json()["messages"]] == ["user", "assistant"]
+def test_vehicle_status_exposes_simulator_as_disconnected():
+    response = client.get("/api/vehicle/status")
+    assert response.status_code == 200
+    assert response.json()["connected"] is False
+    assert response.json()["stale"] is True
+
+def test_vehicle_discovery_is_noninvasive():
+    response = client.get("/api/vehicle/discover")
+    assert response.status_code == 200
+    assert response.json()["ports"] == []
+    assert "no vehicle commands were sent" in response.json()["message"]
