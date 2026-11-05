@@ -6,12 +6,13 @@ from autobot.core.assistant import Assistant
 from autobot.intelligence.stub import StubProvider
 from autobot.memory.store import MemoryStore
 from autobot.vehicle.simulator import SimulatorAdapter
+from autobot.vehicle.obd import OBDAdapter
 
 settings = get_settings()
 memory = MemoryStore(settings.database_file)
 provider = StubProvider()
 assistant = Assistant(provider, memory)
-vehicle = SimulatorAdapter()
+vehicle = (OBDAdapter(port=settings.obd_port, poll_interval=settings.obd_poll_interval, stale_after=settings.obd_stale_after, timeout=settings.obd_timeout) if settings.obd_adapter.lower() == "obd" else SimulatorAdapter())
 app = FastAPI(title=settings.app_name, version="0.1.0")
 
 @app.get("/", response_class=HTMLResponse)
@@ -46,8 +47,25 @@ async def status() -> dict:
     return {"application": "online", "ai_provider": provider.name,
             "vehicle": {"connected": snapshot.connected, "adapter": snapshot.adapter,
                         "vehicle": snapshot.vehicle, "values": snapshot.values,
-                        "message": snapshot.message},
+                        "message": snapshot.message, "updated_at": snapshot.updated_at,
+                        "age_seconds": snapshot.age_seconds, "stale": snapshot.stale,
+                        "errors": snapshot.errors},
             "voice": {"input": settings.voice_input, "output": settings.voice_output}}
+
+@app.get("/api/vehicle/status")
+async def vehicle_status() -> dict:
+    snapshot = await vehicle.snapshot()
+    return {"connected": snapshot.connected, "adapter": snapshot.adapter,
+            "vehicle": snapshot.vehicle, "values": snapshot.values,
+            "message": snapshot.message, "updated_at": snapshot.updated_at,
+            "age_seconds": snapshot.age_seconds, "stale": snapshot.stale,
+            "errors": snapshot.errors}
+
+@app.get("/api/vehicle/discover")
+async def vehicle_discover() -> dict:
+    ports = await vehicle.discover()
+    return {"adapter": vehicle.name, "ports": ports,
+            "message": "Serial discovery only; no vehicle commands were sent."}
 
 @app.post("/api/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest) -> ChatResponse:
