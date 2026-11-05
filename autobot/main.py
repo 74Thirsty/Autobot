@@ -33,7 +33,7 @@ input{box-sizing:border-box;width:100%;padding:14px;border-radius:8px;border:1px
 #reply{white-space:pre-wrap;line-height:1.5}.tag{color:#9bd9bd}</style></head><body><main>
 <h1>Autobot</h1><p class="sub">Vehicle AI assistant · local scaffold</p>
 <section class="card"><h2>System</h2><p class="tag">● API online</p>
-<p>AI: local stub · Vehicle: simulator · Voice: not configured</p>
+<p id="vehicle-status">Vehicle: checking adapter…</p>
 <p class="sub">Simulated values are not live vehicle telemetry.</p></section>
 <section class="card"><h2>Talk to Autobot</h2><form id="chat"><input id="message" maxlength="4000"
 placeholder="Ask Autobot something…" required><p><button>Send message</button></p></form><div id="reply"></div></section>
@@ -41,6 +41,7 @@ placeholder="Ask Autobot something…" required><p><button>Send message</button>
 const box=document.querySelector('#reply');box.textContent='Thinking…';try{const r=await fetch('/api/chat',
 {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:document.querySelector('#message').value})});
 const d=await r.json();box.textContent=d.reply||d.detail||'Request failed';}catch(err){box.textContent=String(err)}})</script>
+fetch('/api/status').then(r=>r.json()).then(d=>{const v=d.vehicle;document.querySelector('#vehicle-status').textContent='Vehicle: '+(v.connected?'connected':'not connected')+' · '+v.adapter+' · '+v.message;}).catch(()=>{document.querySelector('#vehicle-status').textContent='Vehicle status unavailable';});
 </main></body></html>'''
 
 @app.get("/api/health")
