@@ -60,3 +60,16 @@ def test_missing_dependency_is_reported_as_unavailable(monkeypatch):
     monkeypatch.setattr(builtins, "__import__", blocked)
     adapter = OBDAdapter()
     assert asyncio.run(adapter.discover()) == []
+def test_polling_interval_prevents_repeated_pid_queries(monkeypatch):
+    commands = SimpleNamespace(RPM="RPM", SPEED="SPEED", COOLANT_TEMP="COOLANT_TEMP",
+                               FUEL_LEVEL="FUEL_LEVEL")
+    monkeypatch.setitem(sys.modules, "obd", SimpleNamespace(commands=commands))
+    fake = FakeConnection()
+    adapter = OBDAdapter(connection_factory=lambda **kwargs: fake,
+                         serial_scanner=lambda: [], poll_interval=2.0)
+    asyncio.run(adapter.snapshot())
+    first_count = len(fake.queries)
+    asyncio.run(adapter.snapshot())
+    assert first_count == 4
+    assert len(fake.queries) == first_count
+    asyncio.run(adapter.close())
