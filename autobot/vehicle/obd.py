@@ -6,8 +6,9 @@ Only standard diagnostic sensor PIDs are queried.
 import asyncio
 import logging
 import time
-from datetime import datetime, timezone
-from typing import Any, Callable
+from collections.abc import Callable
+from datetime import UTC, datetime
+from typing import Any
 
 from autobot.vehicle.base import VehicleAdapter, VehicleSnapshot
 
@@ -64,7 +65,7 @@ class OBDAdapter(VehicleAdapter):
         try:
             _, scanner = self._dependencies()
             return await asyncio.to_thread(scanner)
-        except Exception as exc:
+        except (ImportError, OSError, RuntimeError, ValueError) as exc:
             self._last_error = str(exc)
             logger.warning("OBD serial discovery unavailable: %s", exc)
             return []
@@ -129,12 +130,12 @@ class OBDAdapter(VehicleAdapter):
                     self._values[key] = value
                     self._pid_errors[key] = None if value is not None else "ECU returned no value"
                     successful += value is not None
-                except Exception as exc:
+                except (OSError, RuntimeError, ValueError, TypeError) as exc:
                     self._pid_errors[key] = str(exc)
                     logger.warning("OBD PID %s query failed: %s", key, exc)
             if successful:
                 self._last_success = time.monotonic()
-                self._last_success_iso = datetime.now(timezone.utc).isoformat()
+                self._last_success_iso = datetime.now(UTC).isoformat()
                 self._last_error = None
             else:
                 self._last_error = (
@@ -156,7 +157,7 @@ class OBDAdapter(VehicleAdapter):
             if self._connection is not None:
                 try:
                     connected = bool(self._connection.is_connected())
-                except Exception:
+                except (OSError, RuntimeError):
                     connected = False
             stale = age is None or age > self.stale_after
             message = self._last_error or (
