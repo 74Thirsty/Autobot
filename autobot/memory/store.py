@@ -1,6 +1,7 @@
 import sqlite3
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
+
 
 class MemoryStore:
     """SQLite store for conversation messages and application events."""
@@ -26,7 +27,7 @@ class MemoryStore:
     def add_message(self, session_id: str, role: str, content: str) -> None:
         with self._connect() as db:
             db.execute("INSERT INTO messages(session_id, role, content, created_at) VALUES (?, ?, ?, ?)",
-                       (session_id, role, content, datetime.now(timezone.utc).isoformat()))
+                       (session_id, role, content, datetime.now(UTC).isoformat()))
 
     def recent_messages(self, session_id: str = "default", limit: int = 30) -> list[dict]:
         with self._connect() as db:
