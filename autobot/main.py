@@ -88,7 +88,7 @@ function startRecognition(kind){
  r.onerror=e=>{voiceMessage('Microphone/speech error: '+e.error+'. Check browser permission and microphone.');if(kind==='push')stopRecognition()};
  r.onresult=e=>{for(let i=e.resultIndex;i<e.results.length;i++){if(!e.results[i].isFinal)continue;
  const words=e.results[i][0].transcript.trim();if(kind==='push'){stopRecognition();askAutobot(words);return}
- const match=words.match(/\bhey\s+autobot\b[,.!\s]*(.*)/i);if(match){const command=match[1].trim();if(command){askAutobot(command)}else{voiceMessage('I’m listening. Say your request.');startRecognition('push');return}}
+ const match=words.match(/\\bhey\\s+autobot\\b[,.!\\s]*(.*)/i);if(match){const command=match[1].trim();if(command){askAutobot(command)}else{voiceMessage('I’m listening. Say your request.');startRecognition('push');return}}
  }};
  r.onend=()=>{if(recognition===r)recognition=null;if(kind==='wake'&&mode==='wake'){if(!busy)setTimeout(()=>{if(mode==='wake'&&!recognition)startRecognition('wake')},350)}else if(kind==='push'){mode='off';voiceMessage('Voice capture ended.')}};
  try{r.start()}catch(e){recognition=null;mode='off';voiceMessage('Could not start microphone: '+e.message)}
