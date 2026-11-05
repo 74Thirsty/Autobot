@@ -49,6 +49,8 @@ Dashboard: http://localhost:8000 · API docs: http://localhost:8000/docs
 
 Run checks: `ruff check . && pytest`
 
+For physical ELM327/OBD-II integration, install `pip install -e ".[vehicle,dev]"`, set `OBD_ADAPTER=obd` in `.env`, and follow [the OBD-II setup and safety validation guide](docs/OBD-II.md).
+
 ## Vehicle target
 
 The initial target vehicle is a **2011 Lincoln MKT**. The Pi 5 runs the local API, dashboard, memory, orchestration, and device adapters. Cloud AI is optional. Start hardware integration with an ELM327-compatible adapter in read-only diagnostic mode.
