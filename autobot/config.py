@@ -15,6 +15,9 @@ class Settings(BaseSettings):
     ai_model: str = ""
     obd_adapter: str = "simulator"
     obd_port: str = ""
+    obd_poll_interval: float = 2.0
+    obd_stale_after: float = 8.0
+    obd_timeout: float = 2.0
     voice_input: str = "disabled"
     voice_output: str = "disabled"
 
