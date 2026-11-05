@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse
 from autobot.api.schemas import ChatRequest, ChatResponse
@@ -13,7 +14,12 @@ memory = MemoryStore(settings.database_file)
 provider = StubProvider()
 assistant = Assistant(provider, memory)
 vehicle = (OBDAdapter(port=settings.obd_port, poll_interval=settings.obd_poll_interval, stale_after=settings.obd_stale_after, timeout=settings.obd_timeout) if settings.obd_adapter.lower() == "obd" else SimulatorAdapter())
-app = FastAPI(title=settings.app_name, version="0.1.0")
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    yield
+    await vehicle.close()
+
+app = FastAPI(title=settings.app_name, version="0.1.0", lifespan=lifespan)
 
 @app.get("/", response_class=HTMLResponse)
 async def dashboard() -> str:
