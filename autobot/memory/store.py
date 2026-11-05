@@ -38,4 +38,4 @@ class MemoryStore:
     def add_event(self, kind: str, payload: str) -> None:
         with self._connect() as db:
             db.execute("INSERT INTO events(kind, payload, created_at) VALUES (?, ?, ?)",
-                       (kind, payload, datetime.now(timezone.utc).isoformat()))
+                       (kind, payload, datetime.now(UTC).isoformat()))
