@@ -135,8 +135,10 @@ class OBDAdapter(VehicleAdapter):
                 self._last_success = time.monotonic()
                 self._last_success_iso = datetime.now(timezone.utc).isoformat()
                 self._last_error = None
-            elif all(value is None for value in self._values.values()):
-                self._last_error = "Connected to adapter, but no supported live PID values were returned."
+            else:
+                self._last_error = (
+                    "Connected to adapter, but this poll returned no valid live PID values."
+                )
         except Exception as exc:
             self._last_error = str(exc)
             logger.exception("OBD polling failed")
