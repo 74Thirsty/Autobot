@@ -6,7 +6,6 @@
 - [x] SQLite message persistence
 - [x] AI provider abstraction and local stub
 - [x] Read-only vehicle adapter contract and disconnected simulator
-- [x] Voice input/output contracts
 - [ ] Clean-environment tests and CI verification
 
 ## Phase 1 — Local device foundation
@@ -22,10 +21,13 @@
 - [ ] Physically validate against 2011 Lincoln MKT without modifying vehicle systems
 
 ## Phase 3 — Voice and interface
-- [ ] Select microphone and speaker path
-- [ ] Wake-word and push-to-talk modes
-- [ ] Speech-to-text and text-to-speech adapters
-- [ ] Responsive touchscreen interface
+- [x] Browser microphone/speaker path using Web Speech APIs (browser-dependent)
+- [x] Push-to-talk speech capture
+- [x] Optional “Hey Autobot” wake-phrase mode while dashboard is open
+- [x] Browser speech-to-text and speech output
+- [x] Responsive touchscreen-friendly dashboard
+- [ ] Validate microphone, speaker, browser support, and wake-phrase reliability on Raspberry Pi 5
+- [ ] Native/offline wake-word and speech engines (not included in browser implementation)
 
 ## Phase 4 — Intelligence and memory
 - [ ] Configurable cloud provider adapter
