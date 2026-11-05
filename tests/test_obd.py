@@ -2,7 +2,6 @@ import asyncio
 import sys
 from types import SimpleNamespace
 
-
 from autobot.vehicle.obd import OBDAdapter
 
 class FakeValue:
