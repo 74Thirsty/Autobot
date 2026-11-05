@@ -1,5 +1,6 @@
 from autobot.intelligence.base import AIProvider
 
+
 class StubProvider(AIProvider):
     """Credential-free provider used for local development."""
     name = "stub"
