@@ -1,5 +1,6 @@
 from autobot.vehicle.base import VehicleAdapter, VehicleSnapshot
 
+
 class SimulatorAdapter(VehicleAdapter):
     """Simulated data; never claims a physical vehicle is connected."""
     name = "simulator"
