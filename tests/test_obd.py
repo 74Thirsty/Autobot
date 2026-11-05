@@ -4,6 +4,7 @@ from types import SimpleNamespace
 
 from autobot.vehicle.obd import OBDAdapter
 
+
 class FakeValue:
     def __init__(self, value):
         self.magnitude = value
