@@ -16,10 +16,10 @@
 - [ ] Graceful shutdown and startup recovery
 
 ## Phase 2 — Vehicle data
-- [ ] ELM327 adapter discovery and connection lifecycle
-- [ ] Read-only OBD-II PID polling with rate limits
-- [ ] Data freshness and unavailable-state handling
-- [ ] Validate against 2011 Lincoln MKT without modifying vehicle systems
+- [x] ELM327 serial adapter discovery and connection lifecycle (implementation; hardware validation pending)
+- [x] Read-only OBD-II PID polling with configurable rate limits
+- [x] Data freshness, stale readings, and unavailable-state handling
+- [ ] Physically validate against 2011 Lincoln MKT without modifying vehicle systems
 
 ## Phase 3 — Voice and interface
 - [ ] Select microphone and speaker path
