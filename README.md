@@ -60,12 +60,13 @@ Raspberry Pi 5 has USB, Bluetooth, Wi-Fi, GPIO, camera/display interfaces, and P
 1. [x] Modular Python scaffold and runnable API
 2. [x] Local SQLite conversation persistence
 3. [x] Simulated read-only vehicle adapter
-4. [ ] Verify clean install, tests, and CI
-5. [ ] Implement and test physical ELM327/OBD-II adapter
+4. [x] ELM327 discovery, read-only PID polling, and stale-data reporting (hardware validation pending)
+5. [ ] Verify clean install, tests, and CI
+6. [ ] Physically validate OBD-II adapter against the Lincoln MKT
 6. [ ] Add voice capture and speech output
-7. [ ] Add configurable cloud/local model providers
-8. [ ] Build touchscreen dashboard and startup/service packaging
-9. [ ] Validate ignition, sleep, shutdown, brownout, and reconnect behavior in vehicle
+8. [ ] Add configurable cloud/local model providers
+9. [ ] Build touchscreen dashboard and startup/service packaging
+10. [ ] Validate ignition, sleep, shutdown, brownout, and reconnect behavior in vehicle
 
 ## Safety and privacy
 
