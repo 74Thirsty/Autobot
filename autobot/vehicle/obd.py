@@ -76,7 +76,8 @@ class OBDAdapter(VehicleAdapter):
                 if self._connection.is_connected():
                     return True
             except Exception:
-                self._close_connection()
+                logger.debug("Existing OBD connection check failed", exc_info=True)
+            self._close_connection()
         port = self.port or None
         self._connection = factory(portstr=port, fast=False, timeout=self.timeout)
         if not self._connection.is_connected():
